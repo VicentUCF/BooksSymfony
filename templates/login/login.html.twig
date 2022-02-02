@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}login{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <h1>Login</h1>
+    <form action="/login/new-login">
+      <div class="mb-2 col-4">
+        <label for="login" class="form-label">Nickname</label>
+        <input name="login" type="text" class="form-control">
+      </div>
+
+      <div class="mb-2 col-4">
+        <label for="login" class="form-label">Password</label>
+        <input name="password" type="text" class="form-control">
+      </div>
+
+      <div class="mb-2">
+        <a href="/register">Create a new User</a>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Login</button>
+
+    </form>
+  </div>
+{% endblock %}
