@@ -1,27 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}login{% endblock %}
+{% block title %}Login{% endblock %}
 
 {% block body %}
   <div class="container">
+          {{ form_errors(form) }}
+
     <h1>Login</h1>
-    <form action="/login/new-login">
-      <div class="mb-2 col-4">
-        <label for="login" class="form-label">Nickname</label>
-        <input name="login" type="text" class="form-control">
+      {{ form_start(form) }}
+       <div class="mb-2 col-4">
+        <label for="nickname" class="form-label">Nickname</label>
+        {{ form_widget(form.nickname, {'attr': {'class': 'form-control'}}) }}
       </div>
 
-      <div class="mb-2 col-4">
-        <label for="login" class="form-label">Password</label>
-        <input name="password" type="text" class="form-control">
-      </div>
-
-      <div class="mb-2">
-        <a href="/register">Create a new User</a>
+       <div class="mb-2 col-4">
+        <label for="nickname" class="form-label">Password</label>
+        {{ form_widget(form.password, {'attr': {'class': 'form-control'}}) }}
       </div>
 
       <button type="submit" class="btn btn-primary">Login</button>
 
-    </form>
+  {{ form_end(form, {'render_rest': false}) }}
+
   </div>
 {% endblock %}

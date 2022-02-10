@@ -1,5 +1,4 @@
 <div class="container mt-3">
-
     {% for type, messages in app.flashes %}
         {% for message in messages %}
                 <div class="alert alert-{{ type }} alert-dismissible fade show" role="alert">
@@ -8,6 +7,4 @@
                 </div>
         {% endfor %}
     {% endfor %}
-
-
 </div>

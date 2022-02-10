@@ -16,8 +16,15 @@
         </div>
 
         <div class="mb-2">
-          <label for="title" class="form-label">Author</label>
-          <input type="text" value="{{ book.author }}" name="author" class="form-control">
+          <label for="author" class="form-label">Author</label>
+          <select class="form-select text-capitalize" name="author" aria-label="Default select example">
+            <option value="{{ book.author.id }}" selected>{{ book.author.nom }}</option>
+            {% for author in authors %}
+             {% if author.id != book.author.id %}
+              <option value="{{ author.id }}">{{ author.nom }}</option>
+             {% endif %}
+            {% endfor %}
+          </select>
         </div>
 
         <div class="mb-2">

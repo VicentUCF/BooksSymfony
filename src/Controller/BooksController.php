@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Author;
 use App\Entity\Book;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,21 +15,25 @@ use Doctrine\Persistence\ManagerRegistry;
 class BooksController extends AbstractController
 {
     private $bookRepository;
-    private $bookManager;
+    private $authorRepository;
+    private $Manager;
 
     function __construct(ManagerRegistry $doctrine)
     {
         $this->bookRepository = $doctrine->getRepository(Book::class);
-        $this->bookManager = $doctrine->getManager();
+        $this->Manager = $doctrine->getManager();
+        $this->authorRepository = $doctrine->getRepository(Author::class);
     }
 
     #[Route('/books', name: 'books')]
     public function index(): Response
     {
         $books = $this->bookRepository->findAll();
+        $authors = $this->authorRepository->findAll();
 
         return $this->render('books/index.html.twig', [
             'books' => $books,
+            'authors' => $authors,
         ]);
     }
 
@@ -36,9 +41,12 @@ class BooksController extends AbstractController
     public function Createbook(Request $req): Response
     {
         $book = new Book();
+        $author = $this->authorRepository->find($req->get('author'));
+
         $book->setTitle($req->get('title'));
-        $book->setAuthor($req->get('author'));
+        $book->setAuthor($author);
         $book->setDate(new DateTime($req->get('date')));
+
 
         if (!$book->getTitle() || !$book->getAuthor()){
           $this->addFlash(
@@ -47,9 +55,11 @@ class BooksController extends AbstractController
           );
           return $this->redirect('/books');
         }
+        $author->addBook($book);
 
-        $this->bookManager->persist($book);
-        $this->bookManager->flush();
+        $this->Manager->persist($author);
+        $this->Manager->persist($book);
+        $this->Manager->flush();
 
         $this->addFlash(
           'success',
@@ -65,12 +75,13 @@ class BooksController extends AbstractController
     public function Updatebook($id, Request $req): Response
     {
         $book = $this->bookRepository->findOneBy(["id" => $id]);
+        $author = $this->authorRepository->find($req->get('author'));
 
         if ($book) {
             $book->setTitle($req->get('title'));
-            $book->setAuthor($req->get('author'));
+            $book->setAuthor($author);
             $book->setDate(new DateTime($req->get('date')));
-            $this->bookManager->flush();
+            $this->Manager->flush();
         }
 
         $this->addFlash(
@@ -86,12 +97,16 @@ class BooksController extends AbstractController
     {
 
         $book = $this->bookRepository->findOneBy(["id" => $id]);
+        $authors = $this->authorRepository->findAll();
 
         if (!$book) {
             return $this->redirect('/books');
         }
 
-        return $this->render("books/edit.html.twig", ["book" => $book]);
+        return $this->render("books/edit.html.twig", [
+          "book" => $book,
+          "authors" => $authors,
+        ]);
     }
 
 
@@ -101,8 +116,8 @@ class BooksController extends AbstractController
         $book = $this->bookRepository->findOneBy(["id" => $id]);
 
         if ($book) {
-            $this->bookManager->remove($book);
-            $this->bookManager->flush();
+            $this->Manager->remove($book);
+            $this->Manager->flush();
             $this->addFlash(
               'danger',
               'Book deleted',
