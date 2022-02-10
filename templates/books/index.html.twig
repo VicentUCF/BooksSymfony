@@ -10,8 +10,9 @@
       <tr class="row">
         <th class="col-3">Title</th>
         <th class="col-3">Author</th>
-        <th class="col-3">Year</th>
-        <th class="col-3"></th>
+        <th class="col-2">Genere</th>
+        <th class="col-2">Year</th>
+        <th class="col-2"></th>
       </tr>
 
 
@@ -20,8 +21,9 @@
       <tr class="row">
         <td class="col-3 text-capitalize">{{ book.title }}</td>
         <td class="col-3 text-capitalize">{{ book.author.nom }}</td>
-        <td class="col-3">{{ book.date.format('Y') }}</td>
-        <td class="col-3">
+        <td class="col-2 text-capitalize">{{ book.genere.name }}</td>
+        <td class="col-2">{{ book.date.format('Y') }}</td>
+        <td class="col-2">
           <a href="/books/edit/{{ book.id }}" class="btn btn-primary">Edit</a>
           <a href="/books/delete/{{ book.id }}" class="btn btn-danger">Delete</a>
         </td>
@@ -42,10 +44,20 @@
 
         <div class="mb-2">
           <label for="author" class="form-label">Author</label>
-          <select class="form-select" name="author" aria-label="Default select example">
+          <select class="form-select" name="genere" aria-label="Default select example">
             <option selected disabled>Select an author</option>
             {% for author in authors %}
-            <option value="{{ author.id }}">{{author.nom}}</option>
+              <option value="{{ author.id }}">{{ author.nom }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+         <div class="mb-2">
+          <label for="author" class="form-label">Genere</label>
+          <select class="form-select" name="author" aria-label="Default select example">
+            <option selected disabled>Select a Genere</option>
+            {% for genere in generes %}
+              <option value="{{ genere.id }}"> {{ genere.name }} </option>
             {% endfor %}
           </select>
         </div>

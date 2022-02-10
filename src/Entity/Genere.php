@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\AuthorRepository;
+use App\Repository\GenereRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
-#[ORM\Entity(repositoryClass: AuthorRepository::class)]
-class Author
+#[ORM\Entity(repositoryClass: GenereRepository::class)]
+class Genere
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -19,9 +19,9 @@ class Author
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank]
-    private $nom;
+    private $name;
 
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Book::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'genere', targetEntity: Book::class, orphanRemoval: true)]
     private $books;
 
     public function __construct()
@@ -34,14 +34,14 @@ class Author
         return $this->id;
     }
 
-    public function getNom(): ?string
+    public function getName(): ?string
     {
-        return $this->nom;
+        return $this->name;
     }
 
-    public function setNom(string $nom): self
+    public function setName(string $name): self
     {
-        $this->nom = $nom;
+        $this->name = $name;
 
         return $this;
     }
@@ -58,7 +58,7 @@ class Author
     {
         if (!$this->books->contains($book)) {
             $this->books[] = $book;
-            $book->setAuthor($this);
+            $book->setGenere($this);
         }
 
         return $this;
@@ -68,16 +68,11 @@ class Author
     {
         if ($this->books->removeElement($book)) {
             // set the owning side to null (unless already changed)
-            if ($book->getAuthor() === $this) {
-                $book->setAuthor(null);
+            if ($book->getGenere() === $this) {
+                $book->setGenere(null);
             }
         }
 
         return $this;
     }
-
-    public function toString(){
-      return ucfirst($this->nom);
-    }
-
 }

@@ -28,6 +28,18 @@
         </div>
 
         <div class="mb-2">
+          <label for="author" class="form-label">Genere</label>
+          <select class="form-select text-capitalize" name="genere" aria-label="Default select example">
+            <option value="{{ book.author.id }}" selected>{{ book.genere.name }}</option>
+            {% for genere in generes %}
+             {% if genere.id != book.genere.id %}
+              <option value="{{ genere.id }}">{{ genere.name }}</option>
+             {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="mb-2">
           <label for="title" class="form-label">Year</label>
           <input type="date"  value="{{ book.date.format("Y-m-d") }}" name="year" class="form-control">
         </div>
